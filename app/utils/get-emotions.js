@@ -1,7 +1,7 @@
 
 import { pipeline } from '@huggingface/transformers';
 
-export const getEmotions(text) {
+export function getEmotions(text) {
     const classifier = await pipeline("text-classification", "SamLowe/roberta-base-go_emotions", "top_k=None");
 
     const emotionsSummaryArray = classifier([text]);

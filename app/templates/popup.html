@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Empatia</title>
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <div class="title-section">
+      <h1>Empatia</h1>
+      <h2>Rethink your social media comments.</h2>
+    </div>
+    <p class="enable-for">
+      <b>Enable for:</b>
+    </p>
+
+    <div id="social-media-checkboxes" class="social-media-checkboxes">
+      <label>
+        <input type="checkbox" value="facebook" checked />
+        Facebook
+      </label>
+      <label>
+        <input type="checkbox" value="instagram" checked />
+        Instagram
+      </label>
+      <label>
+        <input type="checkbox" value="linkedin" checked />
+        LinkedIn
+      </label>
+      <label>
+        <input type="checkbox" value="twitter" checked />
+        Twitter
+      </label>
+      <label>
+        <input type="checkbox" value="tiktok" checked />
+        TikTok
+      </label>
+    </div>
+
+    <div class="sensitivity-slider-section">
+      <label for="sentiment-slider">Adjust Sensitivity:</label>
+      <input
+        type="range"
+        id="sentiment-slider"
+        min="1"
+        max="5"
+        value="3"
+        step="1"
+      />
+    </div>
+    <script type="module" src="../scripts/popup.js"></script>
+  </body>
+</html>

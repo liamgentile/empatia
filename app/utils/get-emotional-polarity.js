@@ -1,9 +1,6 @@
-import { pipeline } from '@huggingface/transformers';
+const sentiment = require("sentiment");
 
-export const getEmotionalPolarity(text) {
-    const classifier = await pipeline("sentiment-analysis");
-
-    const output = classifier(text);
-
-    return output
+export function getEmotionalPolarity(text) {
+  const result = sentiment(text);
+  return result.score;
 }

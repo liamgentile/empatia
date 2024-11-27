@@ -1,0 +1,36 @@
+body {
+  background-color: #edb55e;
+  padding: 20px;
+  width: 200px;
+
+  border: 4px solid #dfe0df;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+label {
+  color: #402e32; 
+}
+
+.title-section {
+  margin-bottom: 20px;
+}
+
+.social-media-checkboxes {
+  display: flex;
+  flex-direction: column;
+}
+
+.sensitivity-slider-section {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.enable-for {
+  margin-top: 20px;
+}
