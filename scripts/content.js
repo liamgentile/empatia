@@ -47,6 +47,48 @@ function handleTyping(userInput) {
                   }
                 }
               );
+            } 
+
+            if (sentimentScore < 0) {
+              chrome.runtime.sendMessage(
+                { action: "getPredominantEmotion" },
+                (response) => {
+                  if (response.emotion === "anger") {
+                    chrome.runtime.sendMessage(
+                      { action: "getRandomAngerSuggestion" },
+                      (response) => {
+                        if (response.message) {
+                          popupElement.innerHTML = `
+                              <div style="color: red;">${response.message}</div>
+                            `;
+                        }
+                      }
+                    );
+                  } else if (response.emotion === "disgust") {
+                    chrome.runtime.sendMessage(
+                      { action: "getRandomAnnoyanceSuggestion" },
+                      (response) => {
+                        if (response.message) {
+                          popupElement.innerHTML = `
+                              <div style="color: red;">${response.message}</div>
+                            `;
+                        }
+                      }
+                    );
+                  } else {
+                    chrome.runtime.sendMessage(
+                      { action: "getRandomDisgustSuggestion" },
+                      (response) => {
+                        if (response.message) {
+                          popupElement.innerHTML = `
+                              <div style="color: red;">${response.message}</div>
+                            `;
+                        }
+                      }
+                    );
+                  }
+                }
+              );
             }
           }
         );
