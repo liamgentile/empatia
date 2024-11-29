@@ -97,12 +97,11 @@ function handleTyping(userInput) {
   }
 }
 
-let lastPopupElement = null; // Track the last popup element
-
 function showPopup(target) {
-  // Remove the previous popup if it exists
-  if (lastPopupElement) {
-    lastPopupElement.remove();
+  const previousPopup = document.querySelector(".typing-popup");
+
+  if (previousPopup) {
+    previousPopup.remove();
   }
   const popupHTML = `
     <div class="typing-popup" style="position: absolute; background-color: #fff; border: 1px solid #ccc; padding: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: block; z-index: 9999;">
@@ -112,7 +111,6 @@ function showPopup(target) {
   `;
 
   target.insertAdjacentHTML("afterend", popupHTML);
-  lastPopupElement = target.nextElementSibling;
 }
 
 async function initialize() {
