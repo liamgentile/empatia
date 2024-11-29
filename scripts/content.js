@@ -16,7 +16,6 @@ function isSelectedSocialMediaSite() {
 function handleTyping(userInput) {
   const currentText = userInput.trim();
   const wordCount = currentText.split(/\s+/).filter(Boolean).length;
-  const delay = 500;
   const minimumWordCount = 5;
 
   let typingTimeout;
@@ -93,7 +92,7 @@ function handleTyping(userInput) {
           }
         );
       }
-    }, delay);
+    }, 500);
   }
 }
 
@@ -118,8 +117,6 @@ async function initialize() {
     document.addEventListener("input", (event) => {
       const { target } = event;
 
-      const delay = 500;
-
       // reddit specific implementation
       const textElement =
         target.shadowRoot?.querySelector('[role="textbox"]') ||
@@ -132,7 +129,7 @@ async function initialize() {
       typingTimeout = setTimeout(() => {
         showPopup(target);
         handleTyping(textElement?.innerText ?? "");
-      }, delay);
+      }, 500);
     });
   }
 }
