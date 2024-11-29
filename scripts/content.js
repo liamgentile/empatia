@@ -47,7 +47,7 @@ function handleTyping(userInput) {
                   }
                 }
               );
-            } 
+            }
 
             if (sentimentScore < 0) {
               chrome.runtime.sendMessage(
