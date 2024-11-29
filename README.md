@@ -2,9 +2,9 @@
 
 ## Real-time analysis of your social media comments to identify emotional content.
 
-1. Select which sites you want to enable empatia for
+1. Select which sites you want to enable empatia for. 
 
-2. Write a comment or a post.  As you're typing empatia will send your text through sentiment.js to determine its emotional polarity.
+2. Write a comment or a post.  As you're typing, empatia will send your text through sentiment.js to determine its emotional polarity.
 
 3. If your comment is positive, you'll see positive reinforcement messages.
 
