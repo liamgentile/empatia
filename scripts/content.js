@@ -22,41 +22,37 @@ function handleTyping(userInput) {
   const currentText = userInput.trim();
   const wordCount = currentText.split(/\s+/).filter(Boolean).length;
 
-  console.log(currentText);
   if (wordCount >= minimumWordCount) {
     clearTimeout(typingTimeout);
 
     typingTimeout = setTimeout(async () => {
-      if (await isSelectedSocialMediaSite()) {
-        console.log("Site is selected for sentiment analysis.");
-        if (currentText !== lastValue) {
-          lastValue = currentText;
+      if (currentText !== lastValue) {
+        lastValue = currentText;
 
-          chrome.runtime.sendMessage(
-            { action: "getSentiment", text: currentText },
-            (response) => {
-              const sentimentScore = response.sentimentScore;
-              console.log("Sentiment Score:", response);
+        chrome.runtime.sendMessage(
+          { action: "getSentiment", text: currentText },
+          (response) => {
+            const sentimentScore = response.sentimentScore;
+            console.log("Sentiment Score:", response);
 
-              const popupElement = document.querySelector('.typing-popup');
+            const popupElement = document.querySelector(".typing-popup");
 
-              if (sentimentScore > 2) {
-                // Request a random positive reinforcement message
-                chrome.runtime.sendMessage(
-                  { action: "getRandomPositiveReinforcementMessage" },
-                  (positiveResponse) => {
-                      console.log(positiveResponse.message);
-                    if (positiveResponse.message) {
-                        popupElement.innerHTML = `
+            if (sentimentScore > 2) {
+              // Request a random positive reinforcement message
+              chrome.runtime.sendMessage(
+                { action: "getRandomPositiveReinforcementMessage" },
+                (positiveResponse) => {
+                  console.log(positiveResponse.message);
+                  if (positiveResponse.message) {
+                    popupElement.innerHTML = `
                         <div style="color: green;">${positiveResponse.message}</div>
                       `;
-                    }
                   }
-                );
-              }
+                }
+              );
             }
-          );
-        }
+          }
+        );
       }
     }, delay);
   }
@@ -65,7 +61,7 @@ function handleTyping(userInput) {
 let lastPopupElement = null; // Track the last popup element
 
 function showPopup(target) {
-    // Remove the previous popup if it exists
+  // Remove the previous popup if it exists
   if (lastPopupElement) {
     lastPopupElement.remove();
   }
@@ -80,19 +76,26 @@ function showPopup(target) {
   lastPopupElement = target.nextElementSibling;
 }
 
-document.addEventListener("input", (event) => {
-  const { target } = event;
+async function initialize() {
+  if (await isSelectedSocialMediaSite()) {
+    document.addEventListener("input", (event) => {
+      const { target } = event;
 
-  // reddit specific implementation
-  const textElement =
-    target.shadowRoot?.querySelector('[role="textbox"]') ||
-    target.querySelector("[data-lexical-text=true]");
+      // reddit specific implementation
+      const textElement =
+        target.shadowRoot?.querySelector('[role="textbox"]') ||
+        target.querySelector("[data-lexical-text=true]");
 
-  if (!target.matches("shreddit-simple-composer, shreddit-composer")) return;
+      if (!target.matches("shreddit-simple-composer, shreddit-composer"))
+        return;
 
-  clearTimeout(typingTimeout);
-  typingTimeout = setTimeout(() => {
-    showPopup(target);
-    handleTyping(textElement?.innerText ?? "");
-  }, delay);
-});
+      clearTimeout(typingTimeout);
+      typingTimeout = setTimeout(() => {
+        showPopup(target);
+        handleTyping(textElement?.innerText ?? "");
+      }, delay);
+    });
+  }
+}
+
+initialize();
