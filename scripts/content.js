@@ -33,16 +33,13 @@ function handleTyping(userInput) {
           { action: "getSentiment", text: currentText },
           (response) => {
             const sentimentScore = response.sentimentScore;
-            console.log("Sentiment Score:", response);
 
             const popupElement = document.querySelector(".typing-popup");
 
             if (sentimentScore > 2) {
-              // Request a random positive reinforcement message
               chrome.runtime.sendMessage(
                 { action: "getRandomPositiveReinforcementMessage" },
                 (positiveResponse) => {
-                  console.log(positiveResponse.message);
                   if (positiveResponse.message) {
                     popupElement.innerHTML = `
                         <div style="color: green;">${positiveResponse.message}</div>

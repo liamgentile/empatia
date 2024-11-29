@@ -35,10 +35,8 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
 
   if (message.action === "getSentiment") {
     const sentiment = new Sentiment();
-    console.log("message text is:" + message.text);
     const sentimentResult = sentiment.analyze(message.text);
     sendResponse({ sentimentScore: sentimentResult.score });
-    console.log(sentimentResult.score);
     return true;
   }
 
