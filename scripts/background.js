@@ -1,19 +1,19 @@
-// Background script to manage storage logic
+import Sentiment from "https://cdn.jsdelivr.net/npm/sentiment@5.0.2/+esm";
+import { positiveReinforcementMessages } from "../content/positive-reinforcement.js";
 
-// Listen for checkbox state changes and store the selected sites
 chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   if (message.action === "getSelectedSites") {
     chrome.storage.local.get("selectedSites", (result) => {
       sendResponse(result.selectedSites || []);
     });
-    return true; // to keep the response open
+    return true;
   }
 
   if (message.action === "setSelectedSites") {
     chrome.storage.local.set({ selectedSites: message.selectedSites }, () => {
       sendResponse({ status: "success" });
     });
-    return true; // to keep the response open
+    return true;
   }
 
   if (message.action === "getModelSensitivity") {
@@ -30,6 +30,25 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
         sendResponse({ status: "success" });
       }
     );
+    return true;
+  }
+
+  if (message.action === "getSentiment") {
+    const sentiment = new Sentiment();
+    console.log("message text is:" + message.text);
+    const sentimentResult = sentiment.analyze(message.text);
+    sendResponse({ sentimentScore: sentimentResult.score });
+    console.log(sentimentResult.score);
+    return true;
+  }
+
+  if (message.action === "getRandomPositiveReinforcementMessage") {
+    const randomMessage =
+      positiveReinforcementMessages[
+        Math.floor(Math.random() * positiveReinforcementMessages.length)
+      ];
+    sendResponse({ message: randomMessage });
+
     return true;
   }
 });
