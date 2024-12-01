@@ -14,14 +14,14 @@ h5,
 h6,
 p,
 label {
-  color: #402e32; 
+  color: #402e32;
 }
 
 .title-section {
   margin-bottom: 20px;
 }
 
-.social-media-checkboxes {
+.checkbox-group {
   display: flex;
   flex-direction: column;
 }

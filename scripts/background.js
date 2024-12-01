@@ -4,6 +4,8 @@ import { positiveReinforcementMessages } from "../content/positive-reinforcement
 import { angerSuggestionsMessages } from "../content/anger-suggestions.js";
 import { annoyanceSuggestionsMessages } from "../content/annoyance-suggestions.js";
 import { disgustSuggestionsMessages } from "../content/disgust-suggestions.js";
+import { sadnessSuggestionsMessages } from "../content/sadness-suggestions.js";
+import { genericNegativeSuggestions } from "../content/generic-negative-suggestions.js";
 
 chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   if (message.action === "getSelectedSites") {
@@ -99,6 +101,26 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
     const randomMessage =
       disgustSuggestionsMessages[
         Math.floor(Math.random() * disgustSuggestionsMessages.length)
+      ];
+    sendResponse({ message: randomMessage });
+
+    return true;
+  }
+
+  if (message.action === "getRandomSadnessSuggestion") {
+    const randomMessage =
+      sadnessSuggestionsMessages[
+        Math.floor(Math.random() * sadnessSuggestionsMessages.length)
+      ];
+    sendResponse({ message: randomMessage });
+
+    return true;
+  }
+
+  if (message.action === "getRandomGenericNegativeSuggestion") {
+    const randomMessage =
+      genericNegativeSuggestions[
+        Math.floor(Math.random() * genericNegativeSuggestions.length)
       ];
     sendResponse({ message: randomMessage });
 

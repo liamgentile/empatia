@@ -11,24 +11,42 @@
       <h1>Empatia</h1>
       <h2>Rethink your social media comments.</h2>
     </div>
-    <p class="enable-for">
-      <b>Enable for:</b>
-    </p>
 
-    <div id="social-media-checkboxes" class="social-media-checkboxes">
-      <label>
-        <input type="checkbox" value="reddit" checked />
-        Reddit
-      </label>
-      <label>
-        <input type="checkbox" value="bsky" checked />
-        Bluesky
-      </label>
-      <label>
-        <input type="checkbox" value="twitter" checked />
-        Twitter (X)
-      </label>
-    </div>
+    <fieldset id="social-media-checkboxes" class="social-media-checkboxes">
+      <legend class="enable-for"><b>Enable for:</b></legend>
+      <div class="checkbox-group">
+        <label for="reddit-checkbox">
+          <input
+            type="checkbox"
+            id="reddit-checkbox"
+            name="platforms"
+            value="reddit"
+            checked
+          />
+          Reddit
+        </label>
+        <label for="bsky-checkbox">
+          <input
+            type="checkbox"
+            id="bsky-checkbox"
+            name="platforms"
+            value="bsky"
+            checked
+          />
+          Bluesky
+        </label>
+        <label for="twitter-checkbox">
+          <input
+            type="checkbox"
+            id="twitter-checkbox"
+            name="platforms"
+            value="twitter"
+            checked
+          />
+          Twitter (X)
+        </label>
+      </div>
+    </fieldset>
 
     <div class="sensitivity-slider-section">
       <label for="sentiment-slider">Adjust Sensitivity:</label>

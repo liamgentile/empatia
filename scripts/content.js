@@ -39,14 +39,40 @@ async function handleTyping(userInput) {
   try {
     await new Promise((resolve) => setTimeout(resolve, 500));
 
-    const response = await new Promise((resolve) => {
+    const modelSensitivityResponse = await new Promise((resolve) => {
+      chrome.runtime.sendMessage({ action: "getModelSensitivity" }, resolve);
+    });
+
+    let negativeThreshold;
+    switch (modelSensitivityResponse) {
+      case 5:
+        negativeThreshold = 0;
+        break;
+      case 4:
+        negativeThreshold = -3;
+        break;
+      case 3:
+        negativeThreshold = -6;
+        break;
+      case 2:
+        negativeThreshold = -9;
+        break;
+      case 1:
+        negativeThreshold = -12;
+        break;
+    }
+
+    let messageContent = "";
+    let messageEmoji = "";
+
+    const getSentimentResponse = await new Promise((resolve) => {
       chrome.runtime.sendMessage(
         { action: "getSentiment", text: currentText },
         resolve
       );
     });
 
-    const sentimentScore = response.sentimentScore;
+    const sentimentScore = getSentimentResponse.sentimentScore;
 
     if (sentimentScore > 2) {
       const positiveResponse = await new Promise((resolve) => {
@@ -57,30 +83,13 @@ async function handleTyping(userInput) {
       });
 
       if (positiveResponse.message) {
-        popupElement.innerHTML = `
-          <div class="popup-content" style="position: relative; padding-right: 20px;">
-            <button type="button" class="close-popup" style="
-              position: absolute;
-              top: 0;
-              right: 0;
-              background: none;
-              border: none;
-              font-size: 20px;
-              cursor: pointer;
-              color: #888;
-              padding: 0;
-              line-height: 1;
-            ">&times;</button>
-            <div style="color: green;">
-              ${positiveResponse.message}
-            </div>
-          </div>
-        `;
-        attachPopupCloseListener();
+        messageEmoji = "😄";
+        messageContent = `${messageEmoji} ${positiveResponse.message}`;
       }
-    }
-
-    if (sentimentScore < 0) {
+    } else if (sentimentScore > negativeThreshold && sentimentScore <= 2) {
+      messageEmoji = "😎";
+      messageContent = `${messageEmoji} You're doing great!`;
+    } else {
       const emotionResponse = await new Promise((resolve) => {
         chrome.runtime.sendMessage(
           { action: "getPredominantEmotion" },
@@ -89,16 +98,28 @@ async function handleTyping(userInput) {
       });
 
       let suggestionAction;
+      let emotionEmoji;
 
       switch (emotionResponse.emotion) {
         case "anger":
           suggestionAction = "getRandomAngerSuggestion";
+          emotionEmoji = "😡";
+          break;
+        case "annoyance":
+          suggestionAction = "getRandomAnnoyanceSuggestion";
+          emotionEmoji = "😒";
           break;
         case "disgust":
-          suggestionAction = "getRandomAnnoyanceSuggestion";
+          suggestionAction = "getRandomDisgustSuggestion";
+          emotionEmoji = "🤢";
+          break;
+        case "sadness":
+          suggestionAction = "getRandomSadnessSuggestion";
+          emotionEmoji = "😢";
           break;
         default:
-          suggestionAction = "getRandomDisgustSuggestion";
+          suggestionAction = "getRandomGenericNegativeSuggestion";
+          emotionEmoji = "😕";
       }
 
       const suggestionResponse = await new Promise((resolve) => {
@@ -106,27 +127,44 @@ async function handleTyping(userInput) {
       });
 
       if (suggestionResponse.message) {
-        popupElement.innerHTML = `
-          <div class="popup-content" style="position: relative; padding-right: 20px;">
-            <button type="button" class="close-popup" style="
-              position: absolute;
-              top: 0;
-              right: 0;
-              background: none;
-              border: none;
-              font-size: 20px;
-              cursor: pointer;
-              color: #888;
-              padding: 0;
-              line-height: 1;
-            ">&times;</button>
-            <div style="color: red;">
-              ${suggestionResponse.message}
-            </div>
-          </div>
-        `;
-        attachPopupCloseListener();
+        messageEmoji = emotionEmoji;
+        messageContent = `Feeling ${messageEmoji}? ${suggestionResponse.message}`;
       }
+    }
+
+    // Update popup with new styling
+    if (messageContent) {
+      popupElement.innerHTML = `
+        <div class="popup-content" style="
+          position: relative; 
+          padding-right: 20px; 
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+          line-height: 1.5;
+        ">
+          <button type="button" class="close-popup" style="
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #888;
+            padding: 0;
+            line-height: 1;
+          ">&times;</button>
+          <div style="
+            background-color: #f0f0f0;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 14px;
+            color: #333;
+          ">
+            ${messageContent}
+          </div>
+        </div>
+      `;
+      attachPopupCloseListener();
     }
   } catch (error) {
     console.error("Error processing typing:", error);
@@ -222,7 +260,7 @@ async function initialize() {
 
         currentText = textElement?.value ?? "";
       }
-      
+
       if (!currentText.trim()) {
         const existingPopup = document.querySelector(".typing-popup");
         if (existingPopup) {
