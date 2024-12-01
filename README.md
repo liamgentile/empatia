@@ -4,7 +4,7 @@ This extension provides real-time analysis of social media comments to identify 
 
 I made this project primarily to learn about Chrome extensions.  It's a great starting point if I ever want to build a more ambitious extension. 
 
-**This is how the extension works: **
+#### This is how the extension works:
 
 1. Select which sites you want to enable empatia for. Right now it's only available to run on Reddit, Bluesky, and Twitter (X).
 
