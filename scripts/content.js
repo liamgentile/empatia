@@ -37,7 +37,7 @@ async function handleTyping(userInput) {
   }
 
   try {
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     const response = await new Promise((resolve) => {
       chrome.runtime.sendMessage(
@@ -82,11 +82,14 @@ async function handleTyping(userInput) {
 
     if (sentimentScore < 0) {
       const emotionResponse = await new Promise((resolve) => {
-        chrome.runtime.sendMessage({ action: "getPredominantEmotion" }, resolve);
+        chrome.runtime.sendMessage(
+          { action: "getPredominantEmotion" },
+          resolve
+        );
       });
 
       let suggestionAction;
-      
+
       switch (emotionResponse.emotion) {
         case "anger":
           suggestionAction = "getRandomAngerSuggestion";
@@ -178,13 +181,13 @@ function showPopup(target) {
 }
 
 function attachPopupCloseListener() {
-  const closeButtons = document.querySelectorAll('.close-popup');
-  closeButtons.forEach(button => {
-    button.addEventListener('click', (event) => {
+  const closeButtons = document.querySelectorAll(".close-popup");
+  closeButtons.forEach((button) => {
+    button.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
 
-      const popup = button.closest('.typing-popup');
+      const popup = button.closest(".typing-popup");
       if (popup) {
         popup.remove();
       }
@@ -197,18 +200,31 @@ async function initialize() {
     const debouncedHandler = debounce((event) => {
       const { target } = event;
 
-      // Reddit specific implementation
-      const textElement =
-        target.shadowRoot?.querySelector('[role="textbox"]') ||
-        target.querySelector("[data-lexical-text=true]");
+      let textElement;
+      let currentText;
 
-      if (!target.matches("shreddit-simple-composer, shreddit-composer")) return;
+      if (window.location.href.includes("reddit")) {
+        if (!target.matches("shreddit-simple-composer, shreddit-composer"))
+          return;
+        textElement =
+          target.shadowRoot?.querySelector('[role="textbox"]') ||
+          target.querySelector("[data-lexical-text=true]");
 
-      const currentText = textElement?.innerText ?? "";
+        currentText = textElement?.innerText ?? "";
+      } else if (window.location.href.includes("bsky")) {
+        if (!target.matches(".tiptap")) return;
+        textElement = target;
 
-      // Remove popup if text is empty
+        currentText = textElement?.innerText ?? "";
+      } else if (window.location.href.includes("x.com")) {
+        if (!target.matches("textarea, [content-editable=true]")) return;
+        textElement = target;
+
+        currentText = textElement?.value ?? "";
+      }
+      
       if (!currentText.trim()) {
-        const existingPopup = document.querySelector('.typing-popup');
+        const existingPopup = document.querySelector(".typing-popup");
         if (existingPopup) {
           existingPopup.remove();
         }
