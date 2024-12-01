@@ -2,10 +2,16 @@
 
 ## Real-time analysis of your social media comments to identify emotional content.
 
-1. Select which sites you want to enable empatia for. 
+I made this project primarily to learn about Chrome extensions.  It's a great starting point if I ever want to build a more ambitious extension. 
 
-2. Write a comment or a post.  As you're typing, empatia will send your text through sentiment.js (https://www.npmjs.com/package/sentiment) to determine its emotional polarity.
+This is how the extension works: 
 
-3. If your comment is positive, you'll see positive reinforcement messages.
+1. Select which sites you want to enable empatia for. Right now it's only available to run on Reddit, Bluesky, and Twitter (X).
 
-4. If your comment is particularly negative, your text will be classified by the model `SamLowe/roberta-base-go_emotions` via `@huggingface/transformers`, and you'll receive emotion specific messages (anger, annoyance, disgust, sadness), which may encourage you to rephrase or reconsider your social media engagement. 
+2. Adjust the sensitivity.  More sensitive = a lower threshold for triggering emotion-specific inline comments.    
+
+3. Write a comment or a post.  As you're typing, empatia will send your text through sentiment.js (https://www.npmjs.com/package/sentiment) to determine its emotional polarity.
+
+4. You'll see positive reinforcement messages if your comment is positive.
+
+5. If your comment is negative, your text will be classified by the model `SamLowe/roberta-base-go_emotions` via `@huggingface/transformers`, and you'll receive emotion-specific messages (anger, annoyance, disgust, sadness), which may encourage you to rephrase or reconsider your social media engagement. 
