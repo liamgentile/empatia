@@ -2,7 +2,7 @@
 
 This chrome extension provides real-time analysis of social media comments to identify emotional content and provide inline feedback.
 
-I made this project primarily to learn about Chrome extensions.  It's a great starting point if I ever want to build a more ambitious extension. 
+I built this project primarily to learn about Chrome extensions.  It's a great starting point if I ever want to build a more ambitious extension. 
 
 #### This is how the extension works (from a user perspective):
 
