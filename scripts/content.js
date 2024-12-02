@@ -77,11 +77,8 @@ async function handleTyping(userInput) {
     const { sentimentScore } = await sendChromeMessage("getSentiment", {
       text: userInput,
     });
+    
     let messageContent = "";
-
-    console.log(sentimentScore);
-    console.log(negativeThreshold);
-
 
     if (sentimentScore > 2) {
       const { message } = await sendChromeMessage(
