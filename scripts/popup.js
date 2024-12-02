@@ -1,4 +1,3 @@
-// set up preferences
 const checkboxes = document.querySelectorAll("#social-media-checkboxes input");
 const sensitivitySlider = document.querySelector("#sentiment-slider");
 const minWordCountInput = document.querySelector("#min-word-count");

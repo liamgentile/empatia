@@ -1,4 +1,3 @@
-// Utility function to get Chrome storage value as a Promise
 function getChromeStorageValue(key, defaultValue = null) {
   return new Promise((resolve) => {
     chrome.storage.local.get([key], (result) => {
@@ -7,7 +6,6 @@ function getChromeStorageValue(key, defaultValue = null) {
   });
 }
 
-// Utility function to send Chrome runtime message as a Promise
 function sendChromeMessage(action, data = {}) {
   return new Promise((resolve) => {
     chrome.runtime.sendMessage({ ...data, action }, resolve);
@@ -168,4 +166,5 @@ async function initialize() {
 }
 
 initialize();
+
 document.addEventListener("extensionSettingsUpdated", initialize);
