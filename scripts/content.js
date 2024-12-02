@@ -42,9 +42,8 @@ async function handleTyping(userInput) {
     const modelSensitivityResponse = await new Promise((resolve) => {
       chrome.runtime.sendMessage({ action: "getModelSensitivity" }, resolve);
     });
-
-    let negativeThreshold;
-    switch (modelSensitivityResponse) {
+    
+    switch (Number(modelSensitivityResponse)) {
       case 5:
         negativeThreshold = 0;
         break;
@@ -86,7 +85,7 @@ async function handleTyping(userInput) {
         messageEmoji = "😄";
         messageContent = `${messageEmoji} ${positiveResponse.message}`;
       }
-    } else if (sentimentScore > negativeThreshold && sentimentScore <= 2) {
+    } else if (sentimentScore >= negativeThreshold && sentimentScore <= 2) {
       messageEmoji = "😎";
       messageContent = `${messageEmoji} You're doing great!`;
     } else {
