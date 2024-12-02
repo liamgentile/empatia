@@ -47,12 +47,9 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   }
 
   if (message.action === "setMinWordCount") {
-    chrome.storage.local.set(
-      { minWordCount: message.minWordCount },
-      () => {
-        sendResponse({ status: "success" });
-      }
-    );
+    chrome.storage.local.set({ minWordCount: message.minWordCount }, () => {
+      sendResponse({ status: "success" });
+    });
     return true;
   }
 
@@ -68,15 +65,17 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
       try {
         const classifier = await pipeline(
           "text-classification",
-          "SamLowe/roberta-base-go_emotions"
+          "SamLowe/roberta-base-go_emotions-onnx"
         );
-        const emotionsSummaryArray = classifier([message.text]);
+        const emotionsSummaryArray = await classifier([message.text]);
+
+        console.log(emotionsSummaryArray);
 
         const highestScoringEmotion = emotionsSummaryArray.reduce((max, item) =>
           item.score > max.score ? item : max
         );
 
-        sendResponse({ emotion: highestScoringEmotion });
+        sendResponse({ emotion: highestScoringEmotion.label });
       } catch (error) {
         sendResponse({ emotion: "Error processing emotion" });
       }

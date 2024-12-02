@@ -77,7 +77,7 @@ async function handleTyping(userInput) {
     const { sentimentScore } = await sendChromeMessage("getSentiment", {
       text: userInput,
     });
-    
+
     let messageContent = "";
 
     if (sentimentScore > 2) {
@@ -88,7 +88,10 @@ async function handleTyping(userInput) {
     } else if (sentimentScore >= negativeThreshold && sentimentScore <= 2) {
       messageContent = "😎 You're doing great!";
     } else {
-      const { emotion } = await sendChromeMessage("getPredominantEmotion");
+      const { emotion } = await sendChromeMessage("getPredominantEmotion", {
+        text: userInput,
+      });
+
       const { action, emoji } =
         EMOTION_ACTIONS[emotion] || EMOTION_ACTIONS.default;
 
