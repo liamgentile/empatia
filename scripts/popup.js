@@ -1,6 +1,7 @@
 // set up preferences
 const checkboxes = document.querySelectorAll("#social-media-checkboxes input");
 const sensitivitySlider = document.querySelector("#sentiment-slider");
+const minWordCountInput = document.querySelector("#min-word-count");
 
 chrome.runtime.sendMessage({ action: "getSelectedSites" }, (selectedSites) => {
   checkboxes.forEach((checkbox) => {
@@ -31,3 +32,25 @@ sensitivitySlider.addEventListener("change", () => {
     modelSensitivity: sensitivitySlider.value,
   });
 });
+
+chrome.runtime.sendMessage({ action: "getMinWordCount" }, (minWordCount) => {
+  minWordCountInput.value = minWordCount;
+});
+
+minWordCountInput.addEventListener("change", () => {
+  chrome.runtime.sendMessage({
+    action: "setMinWordCount",
+    minWordCount: minWordCountInput.value,
+  });
+});
+
+chrome.tabs.query({}, (tabs) => {
+    tabs.forEach((tab) => {
+      chrome.scripting.executeScript({
+        target: { tabId: tab.id },
+        func: () => {
+          document.dispatchEvent(new Event('extensionSettingsUpdated'));
+        }
+      });
+    });
+  });

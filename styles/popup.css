@@ -17,11 +17,11 @@ label {
   color: #402e32;
 }
 
-.title-section {
+.title-section, .min-word-count-section {
   margin-bottom: 20px;
 }
 
-.checkbox-group {
+.checkbox-group, .min-word-count-section {
   display: flex;
   flex-direction: column;
 }
@@ -33,4 +33,8 @@ label {
 
 .enable-for {
   margin-top: 20px;
+}
+
+.min-word-input {
+width: 40px;
 }

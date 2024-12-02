@@ -39,6 +39,23 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
     return true;
   }
 
+  if (message.action === "getMinWordCount") {
+    chrome.storage.local.get("minWordCount", (result) => {
+      sendResponse(result.minWordCount || 3);
+    });
+    return true;
+  }
+
+  if (message.action === "setMinWordCount") {
+    chrome.storage.local.set(
+      { minWordCount: message.minWordCount },
+      () => {
+        sendResponse({ status: "success" });
+      }
+    );
+    return true;
+  }
+
   if (message.action === "getSentiment") {
     const sentiment = new Sentiment();
     const sentimentResult = sentiment.analyze(message.text);
