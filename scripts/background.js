@@ -67,9 +67,8 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
           "text-classification",
           "SamLowe/roberta-base-go_emotions-onnx"
         );
+        
         const emotionsSummaryArray = await classifier([message.text]);
-
-        console.log(emotionsSummaryArray);
 
         const highestScoringEmotion = emotionsSummaryArray.reduce((max, item) =>
           item.score > max.score ? item : max
