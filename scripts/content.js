@@ -149,6 +149,15 @@ function attachPopupCloseListener() {
   });
 }
 
+let inactivityTimeout;
+
+function resetInactivityTimer() {
+  clearTimeout(inactivityTimeout);
+  inactivityTimeout = setTimeout(() => {
+    document.querySelector(".typing-popup")?.remove();
+  }, 10000); 
+}
+
 async function initialize() {
   if (await isSelectedSocialMediaSite()) {
     const debouncedHandler = debounce((event) => {
@@ -163,6 +172,8 @@ async function initialize() {
 
       showPopup(target);
       handleTyping(currentText);
+
+      resetInactivityTimer();
     }, 500);
 
     document.addEventListener("input", debouncedHandler);
