@@ -52,6 +52,16 @@ function getCurrentText(textElement) {
   return textElement?.innerText?.trim() || textElement?.value?.trim() || "";
 }
 
+function attachPopupCloseListener() {
+  document.querySelectorAll(".close-popup").forEach((button) => {
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      button.closest(".typing-popup")?.remove();
+    });
+  });
+}
+
 function showPopup(target) {
   document.querySelector(".typing-popup")?.remove();
 
@@ -137,16 +147,6 @@ async function handleTyping(userInput) {
   } catch (error) {
     console.error("Error processing typing:", error);
   }
-}
-
-function attachPopupCloseListener() {
-  document.querySelectorAll(".close-popup").forEach((button) => {
-    button.addEventListener("click", (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      button.closest(".typing-popup")?.remove();
-    });
-  });
 }
 
 let inactivityTimeout;
