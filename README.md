@@ -48,4 +48,23 @@ Thanks to https://huggingface.co/SamLowe/roberta-base-go_emotions, this extensio
 
 Thanks to <a href="https://www.flaticon.com/free-icons/letter-e" title="letter e icons">Letter e icons created by arnikahossain - Flaticon</a>, this extension has an icon. 
 
+## How to Test the Chrome Extension Locally
+
+##### Prerequisites
+
+Ensure you have Google Chrome or Brave installed.
+
+Clone this repo somewhere on your machine. 
+
+##### Steps
+
+Open Chrome and navigate to the extensions management page by typing chrome://extensions/ in the address bar and pressing Enter. If using Brave, navigate to brave://extensions. 
+
+At the top right corner of the Extensions page, toggle the Developer mode switch to turn it on.
+
+Click the Load unpacked button.
+
+In the file picker that appears, select the `empatia` folder. 
+
+Once loaded, the extension will appear in the list on the Extensions page.
 
