@@ -8,7 +8,7 @@ I built this project primarily to learn about Chrome extensions.  It's a great s
 
 1. Select which sites you want to enable empatia for. Right now it's only available to run on Reddit, Bluesky, and Twitter (X).
 
-2. Adjust the sensitivity.  More sensitive = a lower threshold for triggering emotion-specific inline comments.    
+2. Adjust the sensitivity.  More sensitive = a lower threshold for triggering negative emotion inline comments.    
 
 3. Write a comment or a post.  As you're typing, empatia will send your text through sentiment.js (https://www.npmjs.com/package/sentiment) to determine its emotional polarity.
 
