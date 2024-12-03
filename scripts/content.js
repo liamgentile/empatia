@@ -52,6 +52,38 @@ function getCurrentText(textElement) {
   return textElement?.innerText?.trim() || textElement?.value?.trim() || "";
 }
 
+function showPopup(target) {
+  document.querySelector(".typing-popup")?.remove();
+
+  const popupHTML = `
+    <div class="typing-popup">
+      <div class="popup-content">
+        <button type="button" class="close-popup">&times;</button>
+        <div>
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  target.insertAdjacentHTML("afterend", popupHTML);
+  attachPopupCloseListener();
+}
+
+function updatePopupContent(messageContent) {
+  const popupElement = document.querySelector(".typing-popup");
+  if (popupElement && messageContent) {
+    const contentDiv = popupElement.querySelector(".popup-content > div");
+    const logoPath = chrome.runtime.getURL("icons/icon128.png");
+
+    contentDiv.innerHTML = `
+      <img src="${logoPath}" alt="Extension Logo" class="popup-icon">
+      <span>${messageContent}</span>
+    `;
+    attachPopupCloseListener();
+  }
+}
+
 async function handleTyping(userInput) {
   const EMOTION_ACTIONS = {
     anger: { action: "getRandomAngerSuggestion", emoji: "😡" },
@@ -72,7 +104,9 @@ async function handleTyping(userInput) {
 
   try {
     const modelSensitivity = await sendChromeMessage("getModelSensitivity");
-    const negativeThreshold = [0, -3, -6, -9, -12][5 - Number(modelSensitivity)];
+    const negativeThreshold = [0, -3, -6, -9, -12][
+      5 - Number(modelSensitivity)
+    ];
 
     const { sentimentScore } = await sendChromeMessage("getSentiment", {
       text: userInput,
@@ -103,36 +137,6 @@ async function handleTyping(userInput) {
   } catch (error) {
     console.error("Error processing typing:", error);
   }
-}
-
-function updatePopupContent(messageContent) {
-  const popupElement = document.querySelector(".typing-popup");
-  if (popupElement && messageContent) {
-    popupElement.innerHTML = `
-      <div class="popup-content">
-        <button type="button" class="close-popup">&times;</button>
-        <div>${messageContent}</div>
-      </div>
-    `;
-    attachPopupCloseListener();
-  }
-}
-
-function showPopup(target) {
-  document.querySelector(".typing-popup")?.remove();
-
-  const popupHTML = `
-    <div class="typing-popup">
-      <div class="popup-content">
-        <button type="button" class="close-popup">&times;</button>
-        <div class="spinner"></div>
-        Analyzing text...
-      </div>
-    </div>
-  `;
-
-  target.insertAdjacentHTML("afterend", popupHTML);
-  attachPopupCloseListener();
 }
 
 function attachPopupCloseListener() {
