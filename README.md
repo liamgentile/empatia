@@ -39,3 +39,9 @@ Contains the logic for detecting text input, analyzing it for sentiment, and dis
 ##### background.js
 
 Acts as the backend of the extension, managing communication between the content script and storage for retrieving and setting user preferences, as well as interacting with sentiment and emotion analysis models.
+
+## Acknowledgements
+
+I am indebted to https://www.npmjs.com/package/sentiment for determining the emotional polarity of text.
+
+I am indebted to https://huggingface.co/SamLowe/roberta-base-go_emotions for assigning specific negative emotions to text. 
