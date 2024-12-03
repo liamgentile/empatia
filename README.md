@@ -2,16 +2,6 @@
 
 Empatia is a Chrome extension that provides real-time analysis of social media comments to identify emotional content and deliver inline feedback. This project was primarily built as a learning experience for creating Chrome extensions, serving as a foundational starting point for more complex projects in the future.
 
-## Features
-
-Real-time emotional analysis: Empatia analyzes your social media comments and provides feedback based on the emotional content of your message.
-
-Support for multiple platforms: Currently available on Reddit, Bluesky, and Twitter (X).
-
-Adjustable model sensitivity: Control the sensitivity of emotional analysis, which adjusts the threshold for triggering negative emotion feedback messages.
-
-Positive reinforcement and emotion-specific feedback: Depending on the sentiment, receive positive reinforcement or suggestions to deal with negative emotions (anger, annoyance, disgust, sadness).
-
 ## How It Works (User Perspective)
 
 1. Select supported sites: Choose which sites (Reddit, Bluesky, or Twitter) Empatia will run on.
