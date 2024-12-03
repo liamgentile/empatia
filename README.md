@@ -42,6 +42,10 @@ Acts as the backend of the extension, managing communication between the content
 
 ## Acknowledgements
 
-I am indebted to https://www.npmjs.com/package/sentiment for determining the emotional polarity of text.
+Thanks to https://www.npmjs.com/package/sentiment, this extension can determine the emotional polarity of text.
 
-I am indebted to https://huggingface.co/SamLowe/roberta-base-go_emotions for assigning specific negative emotions to text. 
+Thanks to https://huggingface.co/SamLowe/roberta-base-go_emotions, this extension  can assign specific negative emotions to text.
+
+Thanks to <a href="https://www.flaticon.com/free-icons/letter-e" title="letter e icons">Letter e icons created by arnikahossain - Flaticon</a>, this extension has an icon. 
+
+
