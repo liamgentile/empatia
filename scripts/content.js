@@ -52,46 +52,79 @@ function getCurrentText(textElement) {
   return textElement?.innerText?.trim() || textElement?.value?.trim() || "";
 }
 
-function attachPopupCloseListener() {
-  document.querySelectorAll(".close-popup").forEach((button) => {
+function attachPopupCloseListener(popupContainer) {
+  popupContainer.querySelectorAll(".close-popup").forEach((button) => {
     button.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-      button.closest(".typing-popup")?.remove();
+      popupContainer.remove();
     });
   });
 }
 
-function showPopup(target) {
-  document.querySelector(".typing-popup")?.remove();
+function ensureShadowRoot() {
+  let shadowHost = document.getElementById("empatia-shadow-host");
 
-  const popupHTML = `
-    <div class="typing-popup">
-      <div class="popup-content">
-        <button type="button" class="close-popup">&times;</button>
-        <div>
-          <div class="spinner"></div>
-        </div>
+  if (!shadowHost) {
+    shadowHost = document.createElement("div");
+    shadowHost.id = "empatia-shadow-host";
+    document.body.appendChild(shadowHost);
+    shadowHost.attachShadow({ mode: "open" });
+  }
+
+  return shadowHost.shadowRoot;
+}
+
+function showPopup(target) {
+  const shadowRoot = ensureShadowRoot();
+
+  const existingPopup = shadowRoot.querySelector(".typing-popup");
+  if (existingPopup) existingPopup.remove();
+
+  const popupContainer = document.createElement("div");
+  popupContainer.className = "typing-popup";
+
+  popupContainer.innerHTML = `
+    <link rel="stylesheet" href="${chrome.runtime.getURL(
+      "styles/content.css"
+    )}">
+    <div class="popup-content">
+      <button type="button" class="close-popup">&times;</button>
+      <div>
+        <div class="spinner"></div>
       </div>
     </div>
   `;
 
-  target.insertAdjacentHTML("afterend", popupHTML);
-  attachPopupCloseListener();
+  shadowRoot.appendChild(popupContainer);
+
+  const rect = target.getBoundingClientRect();
+  const offset = window.location.href.includes("reddit") ? 0 : 6;
+  popupContainer.style.position = "absolute";
+  popupContainer.style.top = `${window.scrollY + rect.bottom + offset}px`;
+  popupContainer.style.left = `${window.scrollX + rect.left}px`;
+
+  attachPopupCloseListener(popupContainer);
 }
 
 function updatePopupContent(messageContent) {
-  const popupElement = document.querySelector(".typing-popup");
-  if (popupElement && messageContent) {
-    const contentDiv = popupElement.querySelector(".popup-content > div");
-    const logoPath = chrome.runtime.getURL("icons/icon128.png");
+  const shadowHost = document.getElementById("empatia-shadow-host");
+  if (!shadowHost || !shadowHost.shadowRoot) return;
 
-    contentDiv.innerHTML = `
-      <img src="${logoPath}" alt="Extension Logo" class="popup-icon">
-      <span>${messageContent}</span>
-    `;
-    attachPopupCloseListener();
-  }
+  const shadowRoot = shadowHost.shadowRoot;
+
+  const popupContainer = shadowRoot.querySelector(".typing-popup");
+  if (!popupContainer || !messageContent) return;
+
+  const contentDiv = popupContainer.querySelector(".popup-content > div");
+  const logoPath = chrome.runtime.getURL("icons/icon128.png");
+
+  contentDiv.innerHTML = `
+    <img src="${logoPath}" alt="Extension Logo" class="popup-icon">
+    <span>${messageContent}</span>
+  `;
+
+  attachPopupCloseListener(popupContainer);
 }
 
 async function handleTyping(userInput) {
@@ -102,15 +135,6 @@ async function handleTyping(userInput) {
     sadness: { action: "getRandomSadnessSuggestion", emoji: "😢" },
     default: { action: "getRandomGenericNegativeSuggestion", emoji: "😕" },
   };
-
-  const wordCount = userInput.split(/\s+/).filter(Boolean).length;
-  const minimumWordCount = await sendChromeMessage("getMinWordCount");
-  const popupElement = document.querySelector(".typing-popup");
-
-  if (!userInput || wordCount < minimumWordCount) {
-    popupElement?.remove();
-    return;
-  }
 
   try {
     const modelSensitivity = await sendChromeMessage("getModelSensitivity");
@@ -146,6 +170,7 @@ async function handleTyping(userInput) {
     updatePopupContent(messageContent);
   } catch (error) {
     console.error("Error processing typing:", error);
+    document.querySelector(".typing-popup")?.remove();
   }
 }
 
@@ -155,17 +180,33 @@ function resetInactivityTimer() {
   clearTimeout(inactivityTimeout);
   inactivityTimeout = setTimeout(() => {
     document.querySelector(".typing-popup")?.remove();
-  }, 10000); 
+  }, 10000);
 }
 
+let debouncedHandler;
+
 async function initialize() {
+  const shadowHost = document.getElementById("empatia-shadow-host");
+  if (shadowHost) {
+    shadowHost.remove();
+  }
+
+  if (debouncedHandler) {
+    document.removeEventListener("input", debouncedHandler);
+    debouncedHandler = null;
+  }
+
   if (await isSelectedSocialMediaSite()) {
-    const debouncedHandler = debounce((event) => {
+    const minimumWordCount = await sendChromeMessage("getMinWordCount");
+
+    debouncedHandler = debounce((event) => {
       const { target } = event;
       const textElement = getTextElement(target);
       const currentText = getCurrentText(textElement);
 
-      if (!currentText) {
+      const wordCount = currentText.split(/\s+/).filter(Boolean).length;
+
+      if (!currentText || wordCount < minimumWordCount) {
         document.querySelector(".typing-popup")?.remove();
         return;
       }
@@ -182,4 +223,8 @@ async function initialize() {
 
 initialize();
 
-document.addEventListener("extensionSettingsUpdated", initialize);
+chrome.runtime.onMessage.addListener((message) => {
+  if (message.type === "extensionSettingsUpdated") {
+    initialize();
+  }
+});

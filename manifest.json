@@ -15,8 +15,7 @@
         "https://*.x.com/*",
         "https://*.bsky.app/*"
       ],
-      "js": ["scripts/content.js"],
-      "css": ["styles/content.css"]
+      "js": ["scripts/content.js"]
     }
   ],
   "host_permissions": [
@@ -40,7 +39,7 @@
   },
   "web_accessible_resources": [
     {
-      "resources": ["icons/icon128.png"],
+      "resources": ["icons/icon128.png", "styles/content.css"],
       "matches": ["https://*.reddit.com/*",
         "https://*.twitter.com/*",
         "https://*.x.com/*",

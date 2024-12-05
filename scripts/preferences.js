@@ -15,6 +15,12 @@ checkboxes.forEach((checkbox) => {
       .map((checkbox) => checkbox.value);
 
     chrome.runtime.sendMessage({ action: "setSelectedSites", selectedSites });
+
+    chrome.tabs.query({}, (tabs) => {
+      tabs.forEach((tab) => {
+        chrome.tabs.sendMessage(tab.id, { type: "extensionSettingsUpdated" });
+      });
+    });
   });
 });
 
@@ -30,6 +36,12 @@ sensitivitySlider.addEventListener("change", () => {
     action: "setModelSensitivity",
     modelSensitivity: sensitivitySlider.value,
   });
+
+  chrome.tabs.query({}, (tabs) => {
+    tabs.forEach((tab) => {
+      chrome.tabs.sendMessage(tab.id, { type: "extensionSettingsUpdated" });
+    });
+  });
 });
 
 chrome.runtime.sendMessage({ action: "getMinWordCount" }, (minWordCount) => {
@@ -41,15 +53,10 @@ minWordCountInput.addEventListener("change", () => {
     action: "setMinWordCount",
     minWordCount: minWordCountInput.value,
   });
-});
 
-chrome.tabs.query({}, (tabs) => {
+  chrome.tabs.query({}, (tabs) => {
     tabs.forEach((tab) => {
-      chrome.scripting.executeScript({
-        target: { tabId: tab.id },
-        func: () => {
-          document.dispatchEvent(new Event('extensionSettingsUpdated'));
-        }
-      });
+      chrome.tabs.sendMessage(tab.id, { type: "extensionSettingsUpdated" });
     });
   });
+});

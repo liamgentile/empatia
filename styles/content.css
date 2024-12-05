@@ -1,5 +1,4 @@
 .typing-popup {
-  position: absolute;
   border-radius: 8px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   display: block;
@@ -13,11 +12,11 @@
 
 .typing-popup .close-popup {
   position: absolute;
-  top: -3px;
+  top: 0px;
   right: 5px;
   background: none;
   border: none;
-  font-size: 20px;
+  font-size: 25px;
   cursor: pointer;
   color: #888;
   padding: 0;
