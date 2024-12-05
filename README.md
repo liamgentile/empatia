@@ -6,6 +6,10 @@ Empatia is a Chrome extension that provides real-time analysis of social media c
 
 Ensure you have Google Chrome or Brave installed.
 
+#### Chrome Store
+
+Extension is pending review & will be published soon. 
+
 #### Local setup
 
 Open Chrome and navigate to the extensions management page by typing chrome://extensions/ in the address bar and pressing Enter. If using Brave, navigate to brave://extensions. 
