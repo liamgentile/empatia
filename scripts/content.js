@@ -179,8 +179,12 @@ let inactivityTimeout;
 function resetInactivityTimer() {
   clearTimeout(inactivityTimeout);
   inactivityTimeout = setTimeout(() => {
-    document.querySelector(".typing-popup")?.remove();
-  }, 10000);
+    const shadowHost = document.getElementById("empatia-shadow-host");
+    if (shadowHost && shadowHost.shadowRoot) {
+      const popup = shadowHost.shadowRoot.querySelector(".typing-popup");
+      popup?.remove();
+    }
+  }, 8000);
 }
 
 let debouncedHandler;
@@ -207,7 +211,11 @@ async function initialize() {
       const wordCount = currentText.split(/\s+/).filter(Boolean).length;
 
       if (!currentText || wordCount < minimumWordCount) {
-        document.querySelector(".typing-popup")?.remove();
+        const shadowHost = document.getElementById("empatia-shadow-host");
+        if (shadowHost && shadowHost.shadowRoot) {
+          const popup = shadowHost.shadowRoot.querySelector(".typing-popup");
+          popup?.remove();
+        }
         return;
       }
 
