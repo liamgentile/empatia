@@ -2,6 +2,8 @@
 
 Empatia is a Chrome extension that provides real-time analysis of social media comments to identify emotional content and deliver inline feedback. This project was primarily built as a learning experience for creating Chrome extensions, serving as a foundational starting point for more complex projects in the future.
 
+https://github.com/user-attachments/assets/d599cbf7-e446-486b-b131-a9f9e6f84245
+
 ## How to use
 
 Ensure you have Google Chrome or Brave installed.
