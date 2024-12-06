@@ -10,7 +10,7 @@ Ensure you have Google Chrome or Brave installed.
 
 #### Chrome Store
 
-Extension is pending review & will be published soon. 
+https://chromewebstore.google.com/detail/empatia/jpbmjdgoahbiejonpefgpechleodgele
 
 #### Local setup
 
