@@ -1,3 +1,8 @@
+# 1.1
+
+- default all sites to enabled
+- adjust model sensitivity negative threshold settings  
+
 # 1.0
 
 Initial release of empatia, a chrome extension which provides real-time analysis of social media comments to identify emotional content and provide inline feedback.
