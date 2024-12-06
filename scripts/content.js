@@ -138,7 +138,7 @@ async function handleTyping(userInput) {
 
   try {
     const modelSensitivity = await sendChromeMessage("getModelSensitivity");
-    const negativeThreshold = [0, -3, -6, -9, -12][
+    const negativeThreshold = [0, -2, -4, -6, -8][
       5 - Number(modelSensitivity)
     ];
 

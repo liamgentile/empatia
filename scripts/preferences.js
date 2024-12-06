@@ -3,6 +3,8 @@ const sensitivitySlider = document.querySelector("#sentiment-slider");
 const minWordCountInput = document.querySelector("#min-word-count");
 
 chrome.runtime.sendMessage({ action: "getSelectedSites" }, (selectedSites) => {
+  selectedSites = selectedSites || ["reddit", "bsky", "x.com"];
+  
   checkboxes.forEach((checkbox) => {
     checkbox.checked = selectedSites.includes(checkbox.value);
   });

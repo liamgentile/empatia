@@ -10,7 +10,7 @@ import { genericNegativeSuggestions } from "../content/generic-negative-suggesti
 chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
   if (message.action === "getSelectedSites") {
     chrome.storage.local.get("selectedSites", (result) => {
-      sendResponse(result.selectedSites || []);
+      sendResponse(result.selectedSites);
     });
     return true;
   }
@@ -24,7 +24,7 @@ chrome.runtime.onMessage.addListener((message, _, sendResponse) => {
 
   if (message.action === "getModelSensitivity") {
     chrome.storage.local.get("modelSensitivity", (result) => {
-      sendResponse(result.modelSensitivity || 3);
+      sendResponse(result.modelSensitivity || 5);
     });
     return true;
   }
